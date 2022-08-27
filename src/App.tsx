@@ -11,12 +11,19 @@ function App() {
 
   const [operator, setOperator] = useState<string>('+')
 
+  const [isValue1Active, setIsValue1Active] = useState(true)
   const [isValue2Active, setIsValue2Active] = useState(false)
   const [isValue3Active, setIsValue3Active] = useState(false)
   
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const calculateResult = () => {
-    if (!isValue2Active && !isValue3Active) return setResult('Error')
+
+    let activeCounter = 0
+    if (isValue1Active) activeCounter++
+    if (isValue2Active) activeCounter++
+    if (isValue3Active) activeCounter++
+
+    if (activeCounter < 2) return setResult('Error')
     let calcArr = [value1]
     if (isValue2Active) calcArr.push(value2)
     if (isValue3Active) calcArr.push(value3)
@@ -57,7 +64,7 @@ function App() {
           <Button operatorActive={operator} onClick={() => setOperator('/')} text='/' />
         </div>
         <div className='input-box'>
-          <InputNumber dataTestIdInput='input-box-1' dataTestIdCheckbox='checkbox-box-1' showCheckbox={false} inputValue={value1} isActive={true} onChangeInput={(e) => setValue1(Number(e.target.value))} />
+          <InputNumber dataTestIdInput='input-box-1' dataTestIdCheckbox='checkbox-box-1' inputValue={value1} onChangeInput={(e) => setValue1(Number(e.target.value))} isActive={isValue1Active} onChangeValue={() => setIsValue1Active(old => !old)} />
           <InputNumber inputValue={value3} isActive={isValue3Active} onChangeValue={() => setIsValue3Active(old => !old)} onChangeInput={(e) => setValue3(Number(e.target.value))} />
           <InputNumber dataTestIdInput='input-box-3' dataTestIdCheckbox='checkbox-box-3' inputValue={value2} isActive={isValue2Active} onChangeValue={() => setIsValue2Active(old => !old)} onChangeInput={(e) => setValue2(Number(e.target.value))} />
         </div>
